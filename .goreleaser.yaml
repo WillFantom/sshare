@@ -1,0 +1,57 @@
+project_name: sshare
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    binary: sshare
+    main: ./cmd/sshare
+    ldflags:
+      - -s
+      - -w
+universal_binaries:
+  - replace: true
+archives:
+  - replacements:
+      darwin: Darwin
+      linux: Linux
+      amd64: x86_64
+checksum:
+  name_template: "checksums.txt"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+release:
+  github:
+    owner: ""
+    name: ""
+  draft: false
+  replace_existing_draft: true
+  prerelease: auto
+  mode: replace
+  skip_upload: false
+brews:
+  - tap:
+      owner: willfantom
+      name: "homebrew-tap"
+      branch: main
+    commit_author:
+      name: goreleaserbot
+      email: bot@goreleaser.com
+    commit_msg_template: "Formula update for {{ .ProjectName }} version {{ .Tag }}"
+    homepage: "https://github.com/willfantom/{{ .ProjectName }}"
+    description: "Quickly share cURLable links to your SSH agent's keys!"
+    license: "MIT"
+    folder: Formula
+    skip_upload: false
