@@ -1,4 +1,4 @@
-# SSHare
+# SSHare    ![GitHub release (latest SemVer)](https://img.shields.io/github/v/tag/willfantom/sshare?display_name=tag&label=%20&sort=semver)  ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/willfantom/sshare/release.yml?label=%20&logo=github)
 
 Quickly share SSH keys from your agent as `curl`able links! Use the `sshare` TUI to easily select keys from an SSH agent and automatically generate a [`transfer.sh`](https://transfer.sh) upload that can easily be added to an authorized key file via `curl`. 
 
