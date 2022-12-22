@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/willfantom/sshare/internal/github"
 	"github.com/willfantom/sshare/internal/transfer"
 	"github.com/willfantom/sshare/internal/ui"
 	"github.com/willfantom/sshare/keys"
@@ -15,6 +16,7 @@ var (
 	transferDays      int      = 0
 	sshAgentPath      string   = os.Getenv("SSH_AUTH_SOCK")
 	sshAgentPass      string   = ""
+	githubToken       string   = ""
 	keyFilepaths      []string = make([]string, 0)
 	rawKeys           []string = make([]string, 0)
 )
@@ -35,12 +37,20 @@ var (
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			chosenKeys := make([]*keys.Key, 0)
+
+			if len(keyFilepaths) > 0 {
+				ui.Infoln("Adding keys from files...")
+			}
 			for _, fp := range keyFilepaths {
 				k, err := keys.NewKeyFromFile(fp)
 				if err != nil {
 					ui.Errorln(err.Error(), true)
 				}
 				chosenKeys = append(chosenKeys, k)
+			}
+
+			if len(rawKeys) > 0 {
+				ui.Infoln("Adding keys from raw values...")
 			}
 			for _, rk := range rawKeys {
 				k, err := keys.NewKey(rk, "")
@@ -49,7 +59,23 @@ var (
 				}
 				chosenKeys = append(chosenKeys, k)
 			}
+
+			if githubToken != "" {
+				ui.Infoln("Adding keys from GitHub...")
+				sshAgent := github.NewAgent(githubToken)
+				authorizedKeys, err := sshAgent.GetKeys()
+				if err != nil {
+					ui.Errorln(err.Error(), true)
+				}
+				selectedKeys, err := ui.SelectKey(authorizedKeys)
+				if err != nil {
+					ui.Errorln(err.Error(), true)
+				}
+				chosenKeys = append(chosenKeys, selectedKeys...)
+			}
+
 			if sshAgentPath != "" {
+				ui.Infoln("Adding keys from SSH agent...")
 				agentOpts := make([]keys.AgentOpt, 0)
 				if sshAgentPass != "" {
 					agentOpts = append(agentOpts, keys.AgentPassphraseOpt(sshAgentPass))
@@ -98,6 +124,7 @@ func main() {
 func init() {
 	rootCmd.PersistentFlags().StringVarP(&sshAgentPath, "agent", "a", sshAgentPath, "path to the target ssh agent socket ($SSH_AUTH_SOCK)")
 	rootCmd.PersistentFlags().StringVarP(&sshAgentPass, "passphrase", "p", sshAgentPass, "passphrase for the ssh agent")
+	rootCmd.PersistentFlags().StringVarP(&githubToken, "github-token", "g", githubToken, "github token with permission to read ssh keys")
 	rootCmd.PersistentFlags().StringArrayVarP(&keyFilepaths, "key-file", "f", keyFilepaths, "additional key file(s) to include in the generated authorized_keys")
 	rootCmd.PersistentFlags().StringArrayVarP(&rawKeys, "key", "k", rawKeys, "additional keys to include in the generated authorized_keys")
 	rootCmd.PersistentFlags().IntVarP(&transferDownloads, "max-downloads", "m", 10, "maximum number of times any content shared can be downloaded")

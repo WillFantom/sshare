@@ -46,6 +46,12 @@ Sensible defaults are used, such as connecting to the SSH agent as defined by th
     curl -X DELETE <downloadURL>/<deletionCode>
     ```
 
+- Also provide your GitHub SSH keys as options for keys to share:
+
+  ```
+  sshare -g "<a github access token with read ssh keys permission>"
+  ```
+
 ---
 
 ```
@@ -55,7 +61,8 @@ Usage:
   sshare [flags]
 
 Flags:
-  -a, --agent string           path to the target ssh agent socket ($SSH_AUTH_SOCK) (default "${SSH_AUTH_SOCK}")
+  -a, --agent string           path to the target ssh agent socket ($SSH_AUTH_SOCK) (default "~/.1password/agent.sock")
+  -g, --github-token string    github token with permission to read ssh keys
   -h, --help                   help for sshare
   -k, --key stringArray        additional keys to include in the generated authorized_keys
   -f, --key-file stringArray   additional key file(s) to include in the generated authorized_keys
