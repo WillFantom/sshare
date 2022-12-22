@@ -88,9 +88,9 @@ func main() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&sshAgentPath, "agent", "a", sshAgentPath, "Path to the target SSH Agent socket")
-	rootCmd.PersistentFlags().StringVarP(&sshAgentPass, "passphrase", "p", sshAgentPass, "Passphrase for the SSH agent")
-	rootCmd.PersistentFlags().StringArrayVarP(&keyFilepaths, "key-file", "k", keyFilepaths, "Additional key file(s) to include in the generated authorized_keys")
-	rootCmd.PersistentFlags().IntVarP(&transferDownloads, "max-downloads", "m", 10, "Maximum number of times any content shared can be downloaded")
-	rootCmd.PersistentFlags().IntVarP(&transferDays, "max-days", "d", 2, "Number of days that the content will remain available via transfer.sh")
+	rootCmd.PersistentFlags().StringVarP(&sshAgentPath, "agent", "a", sshAgentPath, "path to the target ssh Agent socket")
+	rootCmd.PersistentFlags().StringVarP(&sshAgentPass, "passphrase", "p", sshAgentPass, "passphrase for the ssh agent")
+	rootCmd.PersistentFlags().StringArrayVarP(&keyFilepaths, "key-file", "k", keyFilepaths, "additional key file(s) to include in the generated authorized_keys")
+	rootCmd.PersistentFlags().IntVarP(&transferDownloads, "max-downloads", "m", 10, "maximum number of times any content shared can be downloaded")
+	rootCmd.PersistentFlags().IntVarP(&transferDays, "max-days", "d", 2, "number of days that the content will remain available via transfer.sh")
 }
