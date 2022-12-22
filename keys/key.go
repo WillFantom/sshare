@@ -2,6 +2,9 @@ package keys
 
 import (
 	"fmt"
+	"io"
+	"os"
+	"strings"
 
 	"golang.org/x/crypto/ssh"
 )
@@ -17,15 +20,33 @@ type Key struct {
 // (comment). If the key can not be parsed as a valid authorized key, an error
 // is returned.
 func NewKey(raw, name string) (*Key, error) {
-	pubkey, _, _, _, err := ssh.ParseAuthorizedKey([]byte(raw))
+	pubkey, comment, _, _, err := ssh.ParseAuthorizedKey([]byte(raw))
 	if err != nil {
 		return nil, fmt.Errorf("could not parse key as a valid authorized key: %w", err)
+	}
+	if name == "" && comment != "" {
+		name = comment
 	}
 	return &Key{
 		raw:    raw,
 		name:   name,
 		pubkey: pubkey,
 	}, nil
+}
+
+// NewKeyFromFile returns a new key based on the contents of a public key file.
+// If the file can not be opened or the key can not be parsed as a valid
+// authorized key, an error is returned.
+func NewKeyFromFile(filepath string) (*Key, error) {
+	file, err := os.Open(filepath)
+	if err != nil {
+		return nil, fmt.Errorf("key file could not be opened: %w", err)
+	}
+	contents, err := io.ReadAll(file)
+	if err != nil {
+		return nil, fmt.Errorf("key file could not be read: %w", err)
+	}
+	return NewKey(strings.TrimSpace(string(contents)), "")
 }
 
 // Name returns the name of the key as determined by the key comment.
