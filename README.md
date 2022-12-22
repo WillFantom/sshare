@@ -33,6 +33,12 @@ Sensible defaults are used, such as connecting to the SSH agent as defined by th
   sshare -a /tmp/ssh-XXXXXXanCbmG/agent.8
   ```
 
+- Add keys from a generated link to an `authorized_keys` file:
+
+  ```
+  curl --fail-with-body https://transfer.sh/<unique_code>/authorized_keys >> ~/.ssh/authorized_keys
+  ```
+
 - Uploads can be deleted by either:
   - Opening the downloaded link in a browser and deleting the key using the given deletion code
   - Or by running:
