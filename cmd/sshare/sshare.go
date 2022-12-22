@@ -8,7 +8,6 @@ import (
 	"github.com/willfantom/sshare/internal/transfer"
 	"github.com/willfantom/sshare/internal/ui"
 	"github.com/willfantom/sshare/keys"
-	"golang.design/x/clipboard"
 )
 
 var (
@@ -72,12 +71,6 @@ var (
 			}
 			ui.Successln(fmt.Sprintf("File Download URL: %s", uploadedFile.DownloadURL()))
 			ui.Infoln(fmt.Sprintf("File Delete Token: %s", uploadedFile.DeleteToken()))
-			if err := clipboard.Init(); err != nil {
-				ui.Warnln("clipboard is not accessible")
-			} else {
-				clipboard.Write(clipboard.FmtText, []byte(uploadedFile.DownloadURL()))
-				ui.Successln("Download URL coppied to clipboard")
-			}
 		},
 	}
 )
