@@ -16,6 +16,7 @@ var (
 	sshAgentPath      string   = os.Getenv("SSH_AUTH_SOCK")
 	sshAgentPass      string   = ""
 	keyFilepaths      []string = make([]string, 0)
+	rawKeys           []string = make([]string, 0)
 )
 
 var (
@@ -36,6 +37,13 @@ var (
 			chosenKeys := make([]*keys.Key, 0)
 			for _, fp := range keyFilepaths {
 				k, err := keys.NewKeyFromFile(fp)
+				if err != nil {
+					ui.Errorln(err.Error(), true)
+				}
+				chosenKeys = append(chosenKeys, k)
+			}
+			for _, rk := range rawKeys {
+				k, err := keys.NewKey(rk, "")
 				if err != nil {
 					ui.Errorln(err.Error(), true)
 				}
@@ -88,9 +96,10 @@ func main() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&sshAgentPath, "agent", "a", sshAgentPath, "path to the target ssh Agent socket")
+	rootCmd.PersistentFlags().StringVarP(&sshAgentPath, "agent", "a", sshAgentPath, "path to the target ssh agent socket ($SSH_AUTH_SOCK)")
 	rootCmd.PersistentFlags().StringVarP(&sshAgentPass, "passphrase", "p", sshAgentPass, "passphrase for the ssh agent")
 	rootCmd.PersistentFlags().StringArrayVarP(&keyFilepaths, "key-file", "f", keyFilepaths, "additional key file(s) to include in the generated authorized_keys")
+	rootCmd.PersistentFlags().StringArrayVarP(&rawKeys, "key", "k", rawKeys, "additional keys to include in the generated authorized_keys")
 	rootCmd.PersistentFlags().IntVarP(&transferDownloads, "max-downloads", "m", 10, "maximum number of times any content shared can be downloaded")
 	rootCmd.PersistentFlags().IntVarP(&transferDays, "max-days", "d", 2, "number of days that the content will remain available via transfer.sh")
 }
