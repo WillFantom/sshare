@@ -2,7 +2,7 @@
 
 Quickly share SSH keys from your agent as `curl`able links! Use the `sshare` TUI to easily select keys from an SSH agent and automatically generate a [`transfer.sh`](https://transfer.sh) upload that can easily be added to an authorized key file via `curl`. 
 
---- 
+---
 
 ## Install 
 
@@ -49,9 +49,11 @@ Usage:
   sshare [flags]
 
 Flags:
-  -a, --agent string           Path to the target SSH Agent socket (default "${SSH_AUTH_SOCK}")
+  -a, --agent string           path to the target ssh agent socket ($SSH_AUTH_SOCK) (default "${SSH_AUTH_SOCK}")
   -h, --help                   help for sshare
-  -k, --key-file stringArray   Additional key file(s) to include in the generated authorized_keys
-  -d, --max-days int           Number of days that the content will remain available via transfer.sh (default 2)
-  -m, --max-downloads int      Maximum number of times any content shared can be downloaded (default 10)
+  -k, --key stringArray        additional keys to include in the generated authorized_keys
+  -f, --key-file stringArray   additional key file(s) to include in the generated authorized_keys
+  -d, --max-days int           number of days that the content will remain available via transfer.sh (default 2)
+  -m, --max-downloads int      maximum number of times any content shared can be downloaded (default 10)
+  -p, --passphrase string      passphrase for the ssh agent
 ```
