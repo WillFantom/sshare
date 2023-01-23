@@ -51,7 +51,6 @@ Sensible defaults are used, such as connecting to the SSH agent as defined by th
     ```
 
 - Also provide your GitHub SSH keys as options for keys to share:
-
   ```
   sshare -g "<a github access token with read ssh keys permission>"
   ```
@@ -63,6 +62,12 @@ Share your public SSH keys found in your agent via curl-able transfer.sh links.
 
 Usage:
   sshare [flags]
+  sshare [command]
+
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  delete      Delete an uploaded authorized_keys file
+  help        Help about any command
 
 Flags:
   -a, --agent string           path to the target ssh agent socket ($SSH_AUTH_SOCK) (default "~/.1password/agent.sock")
@@ -73,4 +78,6 @@ Flags:
   -d, --max-days int           number of days that the content will remain available via transfer.sh (default 2)
   -m, --max-downloads int      maximum number of times any content shared can be downloaded (default 10)
   -p, --passphrase string      passphrase for the ssh agent
+
+Use "sshare [command] --help" for more information about a command.
 ```
