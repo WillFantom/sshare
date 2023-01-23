@@ -86,8 +86,5 @@ func (tsh TransferSh) Upload(data string) (*TransferShFile, error) {
 	if deleteURL == "" || downloadURL == "" {
 		return nil, fmt.Errorf("failed to obtain all urls for the transfer.sh upload")
 	}
-	return &TransferShFile{
-		downloadURL: downloadURL,
-		deleteToken: path.Base(deleteURL),
-	}, nil
+    return NewFile(downloadURL, path.Base(deleteURL)), nil
 }
