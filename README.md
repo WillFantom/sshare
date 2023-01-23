@@ -36,7 +36,7 @@ Sensible defaults are used, such as connecting to the SSH agent as defined by th
 - Add keys from a generated link to an `authorized_keys` file:
 
   ```
-  curl --fail-with-body https://transfer.sh/<unique_code>/authorized_keys >> ~/.ssh/authorized_keys
+  curl --fail-with-body <downloadURL> >> ~/.ssh/authorized_keys
   ```
 
 - Uploads can be deleted by either:
