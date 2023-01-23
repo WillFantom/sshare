@@ -41,6 +41,10 @@ Sensible defaults are used, such as connecting to the SSH agent as defined by th
 
 - Uploads can be deleted by either:
   - Opening the downloaded link in a browser and deleting the key using the given deletion code
+  - By running the `delete` command of `sshare`:
+    ```
+    sshare delete <downloadURL> <deletionCode>
+    ```
   - Or by running:
     ```
     curl -X DELETE <downloadURL>/<deletionCode>
