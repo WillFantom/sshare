@@ -10,20 +10,20 @@ import (
 	"github.com/willfantom/sshare/keys"
 )
 
-// GitHubAgent holds a GitHub API client that has been given a user token.
-type GitHubAgent struct {
+// Agent holds a GitHub API client that has been given a user token.
+type Agent struct {
 	client *gh.Client
 }
 
 // NewAgent creates a new SSH agent like entity, providing access to the
 // authenticated user's public keys and titles of them.
-func NewAgent(token string) *GitHubAgent {
+func NewAgent(token string) *Agent {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
 	)
 	tc := oauth2.NewClient(ctx, ts)
-	return &GitHubAgent{
+	return &Agent{
 		client: gh.NewClient(tc),
 	}
 }
@@ -31,7 +31,7 @@ func NewAgent(token string) *GitHubAgent {
 // GetKeys returns the SSH keys of the authenticated GitHub user as
 // authorized_key style items. If this failed for any reason, such as not being
 // able to contact GitHub or the token not being valid, an error is returned.
-func (gha *GitHubAgent) GetKeys() ([]*keys.Key, error) {
+func (gha *Agent) GetKeys() ([]*keys.Key, error) {
 	ghKeys, _, err := gha.client.Users.ListKeys(context.Background(), "", &gh.ListOptions{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to obtain users ssh keys from github: %w", err)
