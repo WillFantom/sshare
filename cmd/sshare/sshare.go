@@ -112,6 +112,18 @@ var (
 			ui.Infoln(fmt.Sprintf("File Delete Token: %s", uploadedFile.DeleteToken()))
 		},
 	}
+	deleteCmd = &cobra.Command{
+		Use:   "delete [file_url] [delete_token]",
+		Short: "Delete an uploaded authorized_keys file",
+		Args:  cobra.ExactArgs(2),
+		Run: func(cmd *cobra.Command, args []string) {
+			tshFile := transfer.NewFile(args[0], args[1])
+			if err := tshFile.Delete(); err != nil {
+				ui.Errorln("Failed to delete file", true)
+			}
+			ui.Successln("File Deleted")
+		},
+	}
 )
 
 func main() {
@@ -122,11 +134,12 @@ func main() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&sshAgentPath, "agent", "a", sshAgentPath, "path to the target ssh agent socket ($SSH_AUTH_SOCK)")
-	rootCmd.PersistentFlags().StringVarP(&sshAgentPass, "passphrase", "p", sshAgentPass, "passphrase for the ssh agent")
-	rootCmd.PersistentFlags().StringVarP(&githubToken, "github-token", "g", githubToken, "github token with permission to read ssh keys")
-	rootCmd.PersistentFlags().StringArrayVarP(&keyFilepaths, "key-file", "f", keyFilepaths, "additional key file(s) to include in the generated authorized_keys")
-	rootCmd.PersistentFlags().StringArrayVarP(&rawKeys, "key", "k", rawKeys, "additional keys to include in the generated authorized_keys")
-	rootCmd.PersistentFlags().IntVarP(&transferDownloads, "max-downloads", "m", 10, "maximum number of times any content shared can be downloaded")
-	rootCmd.PersistentFlags().IntVarP(&transferDays, "max-days", "d", 2, "number of days that the content will remain available via transfer.sh")
+	rootCmd.Flags().StringVarP(&sshAgentPath, "agent", "a", sshAgentPath, "path to the target ssh agent socket ($SSH_AUTH_SOCK)")
+	rootCmd.Flags().StringVarP(&sshAgentPass, "passphrase", "p", sshAgentPass, "passphrase for the ssh agent")
+	rootCmd.Flags().StringVarP(&githubToken, "github-token", "g", githubToken, "github token with permission to read ssh keys")
+	rootCmd.Flags().StringArrayVarP(&keyFilepaths, "key-file", "f", keyFilepaths, "additional key file(s) to include in the generated authorized_keys")
+	rootCmd.Flags().StringArrayVarP(&rawKeys, "key", "k", rawKeys, "additional keys to include in the generated authorized_keys")
+	rootCmd.Flags().IntVarP(&transferDownloads, "max-downloads", "m", 10, "maximum number of times any content shared can be downloaded")
+	rootCmd.Flags().IntVarP(&transferDays, "max-days", "d", 2, "number of days that the content will remain available via transfer.sh")
+	rootCmd.AddCommand(deleteCmd)
 }
