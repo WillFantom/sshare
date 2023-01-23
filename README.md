@@ -21,10 +21,10 @@ Simply run: `sshare`
 
 Sensible defaults are used, such as connecting to the SSH agent as defined by the `SSH_AUTH_SOCK` environment variable.
 
-- To include keys that are not found in your agent, you can specify a file containing the public key with the `-k` flag (and can be specified multiple times):
+- To include keys that are not found in your agent, you can specify a file containing the public key with the `-f` flag (and can be specified multiple times):
 
   ```
-  sshare -k ~/.ssh/id_rsa.pub
+  sshare -f ~/.ssh/id_rsa.pub
   ```
 
 - An SSH agent socket path other than the one found in `SSH_AUTH_SOCK` can be provided using the `-a` flag:
