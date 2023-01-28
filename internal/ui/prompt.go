@@ -26,10 +26,10 @@ func SelectKey(authKeys []*keys.Key) ([]*keys.Key, error) {
 	if err := survey.AskOne(&ms, &chosenKeyOptions); err != nil {
 		return nil, fmt.Errorf("prompt exited")
 	}
-	if len(chosenKeyOptions) <= 0 {
-		return nil, fmt.Errorf("no keys were selected")
-	}
 	chosenKeys := make([]*keys.Key, len(chosenKeyOptions))
+	if len(chosenKeyOptions) <= 0 {
+		return nil, nil
+	}
 	for idx, ck := range chosenKeyOptions {
 		keyIndex, err := strconv.Atoi(strings.SplitN(ck, ".", 2)[0])
 		if err != nil {
