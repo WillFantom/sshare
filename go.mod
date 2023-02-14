@@ -28,6 +28,6 @@ require (
 require (
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/spf13/cobra v1.6.1
-	golang.org/x/oauth2 v0.4.0
+	golang.org/x/oauth2 v0.5.0
 	golang.org/x/sys v0.5.0 // indirect
 )
