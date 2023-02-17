@@ -19,8 +19,23 @@ type TransferSh struct {
 
 const (
 	// TransferBaseURL is the base URL of transfer.sh using https.
-	TransferBaseURL string = "https://transfer.sh"
+	DefaultTransferBaseURL string = "https://transfer.sh"
 )
+
+var (
+	transferBaseURL string = DefaultTransferBaseURL
+)
+
+func SetTransferShURL(tshURL string) error {
+	if u, err := url.Parse(tshURL); err != nil {
+		return fmt.Errorf("invalid transfer.sh url: %w", err)
+	} else if u.Scheme != "http" && u.Scheme != "https" {
+		return fmt.Errorf("transfer.sh url not http or https scheme")
+	} else {
+		transferBaseURL = u.String()
+	}
+	return nil
+}
 
 // NewTransferSh returns an instance of a TransferSh config with appropriate
 // default value for the context. Specifically, the file name is set to
@@ -57,7 +72,7 @@ func (tsh TransferSh) WithMaxDays(maxDays int) TransferSh {
 // transfer.sh. Returned are the URLs to both download/curl the file and to
 // delete the file form transfer.sh. If the upload fails, an error is returned.
 func (tsh TransferSh) Upload(data string) (*TransferShFile, error) {
-	uploadURL, err := url.JoinPath(TransferBaseURL, tsh.fileName)
+	uploadURL, err := url.JoinPath(transferBaseURL, tsh.fileName)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build upload url for transfer.sh: %w", err)
 	}
@@ -86,5 +101,5 @@ func (tsh TransferSh) Upload(data string) (*TransferShFile, error) {
 	if deleteURL == "" || downloadURL == "" {
 		return nil, fmt.Errorf("failed to obtain all urls for the transfer.sh upload")
 	}
-    return NewFile(downloadURL, path.Base(deleteURL)), nil
+	return NewFile(downloadURL, path.Base(deleteURL)), nil
 }

@@ -12,6 +12,7 @@ import (
 )
 
 var (
+	tshInstanceURL    string   = transfer.DefaultTransferBaseURL
 	transferDownloads int      = 0
 	transferDays      int      = 0
 	sshAgentPath      string   = os.Getenv("SSH_AUTH_SOCK")
@@ -32,6 +33,9 @@ var (
 			}
 			if transferDownloads <= 0 {
 				ui.Errorln("Uploaded content must be downloadable via transfer.sh for at least 1 time", true)
+			}
+			if err := transfer.SetTransferShURL(tshInstanceURL); err != nil {
+				ui.Errorln("Transfer.sh URL is not valid: "+err.Error(), true)
 			}
 			return nil
 		},
@@ -139,6 +143,7 @@ func init() {
 	rootCmd.Flags().StringVarP(&githubToken, "github-token", "g", githubToken, "github token with permission to read ssh keys")
 	rootCmd.Flags().StringSliceVarP(&keyFilepaths, "key-file", "f", keyFilepaths, "additional key file(s) to include in the generated authorized_keys")
 	rootCmd.Flags().StringSliceVarP(&rawKeys, "key", "k", rawKeys, "additional keys to include in the generated authorized_keys")
+	rootCmd.PersistentFlags().StringVar(&tshInstanceURL, "url", transfer.DefaultTransferBaseURL, "url of the target transfer.sh instance")
 	rootCmd.Flags().IntVarP(&transferDownloads, "max-downloads", "m", 10, "maximum number of times any content shared can be downloaded")
 	rootCmd.Flags().IntVarP(&transferDays, "max-days", "d", 2, "number of days that the content will remain available via transfer.sh")
 	rootCmd.AddCommand(deleteCmd)
