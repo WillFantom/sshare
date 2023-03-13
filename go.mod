@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.6
-	github.com/fatih/color v1.14.1
+	github.com/fatih/color v1.15.0
 	golang.org/x/crypto v0.6.0
 )
 
@@ -29,5 +29,5 @@ require (
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/spf13/cobra v1.6.1
 	golang.org/x/oauth2 v0.5.0
-	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/sys v0.6.0 // indirect
 )
