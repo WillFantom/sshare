@@ -3,7 +3,7 @@ module github.com/willfantom/sshare
 go 1.19
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.3.6
+	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/fatih/color v1.15.0
 	golang.org/x/crypto v0.10.0
 )
