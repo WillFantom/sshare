@@ -29,10 +29,10 @@ var (
 		Long:  `Share your public SSH keys found in your agent via curl-able transfer.sh links.`,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			if transferDays <= 0 {
-				ui.Errorln("Uploaded content must be visible on transfer.sh for at least 1 day", true)
+				ui.Errorln("Uploaded content must be visible on a transfer.sh instance for at least 1 day", true)
 			}
 			if transferDownloads <= 0 {
-				ui.Errorln("Uploaded content must be downloadable via transfer.sh for at least 1 time", true)
+				ui.Errorln("Uploaded content must be downloadable via a transfer.sh instance at least 1 time", true)
 			}
 			if err := transfer.SetTransferShURL(tshInstanceURL); err != nil {
 				ui.Errorln("Transfer.sh URL is not valid: "+err.Error(), true)
