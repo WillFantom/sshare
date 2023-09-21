@@ -15,6 +15,7 @@ type TransferSh struct {
 	fileName     string
 	maxDownloads int
 	maxDays      int
+	password     string
 }
 
 const (
@@ -45,6 +46,7 @@ func NewTransferSh() *TransferSh {
 		fileName:     "authorized_keys",
 		maxDownloads: 10,
 		maxDays:      2,
+		password:     "",
 	}
 }
 
@@ -68,6 +70,13 @@ func (tsh TransferSh) WithMaxDays(maxDays int) TransferSh {
 	return tsh
 }
 
+// WithPassword can be used to set the serverside encryption password for a
+// transfer.sh file upload.
+func (tsh TransferSh) WithPassword(password string) TransferSh {
+	tsh.password = password
+	return tsh
+}
+
 // Upload creates a new file with the contents of data and uploads it to
 // transfer.sh. Returned are the URLs to both download/curl the file and to
 // delete the file form transfer.sh. If the upload fails, an error is returned.
@@ -84,6 +93,9 @@ func (tsh TransferSh) Upload(data string) (*TransferShFile, error) {
 	req.Header.Set("Content-Type", "text/plain")
 	req.Header.Set("Max-Downloads", strconv.Itoa(tsh.maxDownloads))
 	req.Header.Set("Max-Days", strconv.Itoa(tsh.maxDays))
+	if tsh.password != "" {
+		req.Header.Set("X-Encrypt-Password", tsh.password)
+	}
 	resp, err := (&http.Client{}).Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to perform the upload request: %w", err)

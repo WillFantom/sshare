@@ -15,6 +15,7 @@ var (
 	tshInstanceURL    string   = transfer.DefaultTransferBaseURL
 	transferDownloads int      = 0
 	transferDays      int      = 0
+	password          string   = ""
 	sshAgentPath      string   = os.Getenv("SSH_AUTH_SOCK")
 	sshAgentPass      string   = ""
 	githubToken       string   = ""
@@ -146,5 +147,6 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&tshInstanceURL, "url", transfer.DefaultTransferBaseURL, "url of the target transfer.sh instance")
 	rootCmd.Flags().IntVarP(&transferDownloads, "max-downloads", "m", 10, "maximum number of times any content shared can be downloaded")
 	rootCmd.Flags().IntVarP(&transferDays, "max-days", "d", 2, "number of days that the content will remain available via transfer.sh")
+	rootCmd.Flags().StringVarP(&password, "encrypt", "e", password, "password for transfer.sh server-side encryption")
 	rootCmd.AddCommand(deleteCmd)
 }
